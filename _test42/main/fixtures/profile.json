@@ -1,0 +1,10 @@
+[{
+	"pk": 1,
+	"model": "main.profile",
+	"fields": {
+		"name": "Some name",
+		"surname": "Some surname",
+		"birth_date": "2011-12-14",
+		"bio": "Some bio\nMultiline"
+	}
+}]
