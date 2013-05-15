@@ -1,6 +1,5 @@
-test:
-	python _test42/manage.py test
-	pep8 --repeat --ignore=E501 _test42/*.py
+test: cleanup
+	python manage.py test
 	
 cleanup:
 	-rm -rf build
