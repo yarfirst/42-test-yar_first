@@ -12,7 +12,7 @@ from models import Profile
 
 class Test(TestCase):
 
-    fixtures = ['profile.json']
+    fixtures = ['initial_data.json']
 
     def test_profile_exists(self):
         profiles = Profile.objects.all()
