@@ -28,11 +28,11 @@ class Test(TestCase):
         
         self.failUnless(res.context.has_key('profile'))
 
-        p = Profile.objects.get(id=1)
+        p = Profile.objects.all()[0]
         self.failUnless(res.content.find(p.name))
 
     def test_request_middleware(self):
-        res = self.client.get('/')
+        res = self.client.get('/requests/')
         self.assertEqual(res.status_code, 200)
         
         request_logs = RequestLog.objects.all().order_by('id')
@@ -46,4 +46,4 @@ class Test(TestCase):
         self.failUnless(log_length)
         self.failIf(log_length > 10)
 
-        self.failUnless(res.content.find('/favicon.ico'))
+        self.failUnless(res.content.find('/requests/'))
