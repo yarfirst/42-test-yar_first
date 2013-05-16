@@ -13,3 +13,6 @@ class Profile(models.Model):
     jabber = models.CharField(max_length=256)
     skype = models.IntegerField()
     other = models.TextField()
+
+    def __unicode__(self):
+        return u'%s %s' % (self.name, self.surname)

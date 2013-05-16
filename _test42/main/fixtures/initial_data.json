@@ -1,5 +1,16 @@
 [{
 	"pk": 1,
+	"model": "auth.user",
+	"fields": {
+		"username": "admin",
+		"email": "admin@admin.com",
+		"password": "sha1$0346e$ca16e2a688f56a7b4a078a29e3070d0f454ae0d9",
+		"is_active": 1,
+		"is_staff": 1,
+		"is_superuser": 1
+	}
+},{
+	"pk": 1,
 	"model": "main.profile",
 	"fields": {
 		"name": "Some name",
