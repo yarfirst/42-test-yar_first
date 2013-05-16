@@ -5,5 +5,5 @@ from models import Profile
 
 
 def profile(request):
-    profile = get_object_or_404(Profile, pk=1)
+    profile = get_object_or_404(Profile, id=1)
     return render(request, 'profile.html', {'pofile': profile})

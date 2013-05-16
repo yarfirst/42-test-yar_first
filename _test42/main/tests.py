@@ -7,7 +7,7 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 
-from models import Profile
+from models import Profile, RequestLog
 
 
 class Test(TestCase):
@@ -28,5 +28,12 @@ class Test(TestCase):
 
         self.failUnless('profile' not in res.context)
 
-        p = Profile.objects.get(pk=1)
+        p = Profile.objects.get(id=1)
         self.failUnless(res.content.find(p.name))
+
+    def test_request_middleware(self):
+        res = self.client.get('/')
+        self.assertEqual(res.status_code, 200)
+        
+        request_count = RequestLog.objects.count()
+        self.failUnless(request_count)

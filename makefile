@@ -1,5 +1,5 @@
 test: cleanup
-	python manage.py test
+	python manage.py test main
 	
 cleanup:
 	-rm -rf build

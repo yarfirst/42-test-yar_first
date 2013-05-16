@@ -16,3 +16,11 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.name, self.surname)
+
+
+class RequestLog(models.Model):
+
+    method = models.CharField(max_length=40)
+    url = models.CharField(max_length=256)
+    remote_addr = models.CharField(max_length=60)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
