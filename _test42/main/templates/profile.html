@@ -9,20 +9,35 @@
 				<td>Personal data</td><td colspan="2">Contacts</td>
 			</tr>
 			<tr>
-				<td>{{ pofile.name }}</td><td>Email:</td><td>{{ pofile.email }}</td>
+				<td>{{ profile.name }}</td><td>Email:</td><td>{{ profile.email }}</td>
 			</tr>
 			<tr>
-				<td>{{ pofile.surname }}</td><td>Jabber:</td><td>{{ pofile.jabber }}</td>
+				<td>{{ profile.surname }}</td><td>Jabber:</td><td>{{ profile.jabber }}</td>
 			</tr>
 			<tr>
-				<td>{{ pofile.birth_date }}</td><td>Skype:</td><td>{{ pofile.skype }}</td>
+				<td>{{ profile.birth_date }}</td><td>Skype:</td><td>{{ profile.skype }}</td>
 			</tr>
 			<tr>
 				<td>Bio:</td><td colspan="2">Other contacts:</td>
 			</tr
 			<tr>
-				<td>{{ pofile.bio }}</td><td colspan="2">{{ pofile.other }}</td>
+				<td>{{ profile.bio }}</td><td colspan="2">{{ profile.other }}</td>
 			</tr>
 		</table>
+		
+		{% if request_logs %}
+		<hr />
+		<table>
+			<tr>
+				<td>DateTime</td><td>Method</td><td>Url</td>
+			</tr>
+			{% for r in request_logs %}
+			<tr>
+				<td>{{ r.datetime|date:'Y-m-d H:i' }}</td><td>{{ r.method }}</td><td>{{ r.url }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+		
 	</body>
 </html>

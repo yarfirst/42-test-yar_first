@@ -25,8 +25,8 @@ class Test(TestCase):
     def test_profile_page(self):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
-
-        self.failUnless('profile' not in res.context)
+        
+        self.failUnless(res.context.has_key('profile'))
 
         p = Profile.objects.get(id=1)
         self.failUnless(res.content.find(p.name))
@@ -35,5 +35,15 @@ class Test(TestCase):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
         
-        request_count = RequestLog.objects.count()
-        self.failUnless(request_count)
+        request_logs = RequestLog.objects.all().order_by('id')
+        self.failUnless(request_logs)
+        
+        self.failUnless(res.context.has_key('request_logs'))
+        
+        context_request_logs = res.context['request_logs']
+        
+        log_length = len(context_request_logs)
+        self.failUnless(log_length)
+        self.failIf(log_length > 10)
+
+        self.failUnless(res.content.find('/favicon.ico'))
