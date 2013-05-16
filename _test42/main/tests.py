@@ -27,3 +27,6 @@ class Test(TestCase):
         self.assertEqual(res.status_code, 200)
 
         self.failUnless('profile' not in res.context)
+
+        p = Profile.objects.get(pk=1)
+        self.failUnless(res.content.find(p.name))
