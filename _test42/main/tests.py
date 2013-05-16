@@ -47,3 +47,13 @@ class Test(TestCase):
         self.failIf(log_length > 10)
 
         self.failUnless(res.content.find('/requests/'))
+
+    def test_context_processor(self):
+        res = self.client.get('/')
+        self.assertEqual(res.status_code, 200)
+        
+        self.failUnless(res.context.has_key('SETTINGS'))
+        context_settings = res.context['SETTINGS']
+        
+        from django.conf import settings
+        self.assertEqual(context_settings.DEBUG, settings.DEBUG)

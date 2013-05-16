@@ -109,6 +109,11 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    '_test42.main.context_processors.settings_processor',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
