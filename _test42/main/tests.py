@@ -26,7 +26,7 @@ class Test(TestCase):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
         
-        self.failUnless(res.context.has_key('profile'))
+        self.failUnless(res.context.__contains__('profile'))
 
         p = Profile.objects.all()[0]
         self.failUnless(res.content.find(p.name))
@@ -37,8 +37,8 @@ class Test(TestCase):
         
         request_logs = RequestLog.objects.all().order_by('id')
         self.failUnless(request_logs)
-        
-        self.failUnless(res.context.has_key('request_logs'))
+
+        self.failUnless(res.context.__contains__('request_logs'))
         
         context_request_logs = res.context['request_logs']
         
@@ -52,7 +52,7 @@ class Test(TestCase):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
         
-        self.failUnless(res.context.has_key('SETTINGS'))
+        self.failUnless(res.context.__contains__('SETTINGS'))
         context_settings = res.context['SETTINGS']
         
         from django.conf import settings

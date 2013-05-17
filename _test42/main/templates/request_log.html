@@ -1,21 +1,18 @@
-<html>
-	<head>
-		<title>42 Coffee Cups Test Assignment</title>
-	</head>
-	<body>
-		<table>
-			<tr>
-				<td>DateTime</td><td>Method</td><td>Url</td>
-			</tr>
-			{% for r in request_logs %}
-			<tr>
-				<td>{{ r.datetime|date:'Y-m-d H:i' }}</td><td>{{ r.method }}</td><td>{{ r.url }}</td>
-			</tr>
-			{% endfor %}
-		</table>
-		
-		<hr />
-		
-		<a href="{% url profile%}">profile</a>
-	</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+	<tr>
+		<td>DateTime</td><td>Method</td><td>Url</td>
+	</tr>
+	{% for r in request_logs %}
+	<tr>
+		<td>{{ r.datetime|date:'Y-m-d H:i' }}</td><td>{{ r.method }}</td><td>{{ r.url }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<hr />
+
+<a href="{% url profile%}">profile</a>
+{% endblock %}

@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from models import Profile, RequestLog
@@ -8,6 +9,11 @@ def profile(request):
     profile = Profile.objects.all()[0]
 
     return render(request, 'profile.html', {'profile': profile})
+
+
+@login_required
+def profile_edit(request):
+    pass
 
 
 def request_log(request):
