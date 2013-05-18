@@ -109,6 +109,9 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+PASSWORD_HASHERS = (
+  'django.contrib.auth.hashers.SHA1PasswordHasher',
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',

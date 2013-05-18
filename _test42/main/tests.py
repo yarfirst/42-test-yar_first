@@ -26,7 +26,7 @@ class Test(TestCase):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
         
-        self.failUnless(res.context.__contains__('profile'))
+        self.failUnless(res.context['profile'])
 
         p = Profile.objects.all()[0]
         self.failUnless(res.content.find(p.name))
@@ -38,7 +38,7 @@ class Test(TestCase):
         request_logs = RequestLog.objects.all().order_by('id')
         self.failUnless(request_logs)
 
-        self.failUnless(res.context.__contains__('request_logs'))
+        self.failUnless(res.context['request_logs'])
         
         context_request_logs = res.context['request_logs']
         
@@ -52,8 +52,22 @@ class Test(TestCase):
         res = self.client.get('/')
         self.assertEqual(res.status_code, 200)
         
-        self.failUnless(res.context.__contains__('SETTINGS'))
+        self.failUnless(res.context['SETTINGS'])
         context_settings = res.context['SETTINGS']
         
         from django.conf import settings
         self.assertEqual(context_settings.DEBUG, settings.DEBUG)
+
+    def test_edit_page(self):
+        profile = Profile.objects.all()[0]
+        
+        profile_edit_url = '/edit/%s/' % profile.id
+        
+        res = self.client.get(profile_edit_url)
+        self.assertEqual(res.status_code, 302)
+        
+        self.client.login(username='admin', password='admin')
+        res = self.client.get(profile_edit_url)
+        self.assertEqual(res.status_code, 200)
+
+        self.failUnless(res.content.find('id_name'))
