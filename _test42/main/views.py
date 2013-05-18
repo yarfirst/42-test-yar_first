@@ -19,7 +19,7 @@ def profile_edit(request, profile_id=None):
     
     profile = get_object_or_404(Profile, id=int(profile_id))
     if request.POST:
-        form = ProfileEditForm(request.POST, instance=profile)
+        form = ProfileEditForm(data=request.POST, files=request.FILES, instance=profile)
         if form.is_valid():
             form.save()
     else:

@@ -71,3 +71,11 @@ class Test(TestCase):
         self.assertEqual(res.status_code, 200)
 
         self.failUnless(res.content.find('id_name'))
+        
+        data = profile.__dict__
+        data['name'] = 'TEST NAME'
+        res = self.client.post(profile_edit_url, data)
+        self.assertEqual(res.status_code, 200)
+        
+        profile = Profile.objects.all()[0]
+        self.assertEqual(profile.name, data['name'])
