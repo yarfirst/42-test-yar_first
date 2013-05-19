@@ -75,7 +75,7 @@ class Test(TestCase):
         data = profile.__dict__
         data['name'] = 'TEST NAME'
         res = self.client.post(profile_edit_url, data)
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 302)
         
         profile = Profile.objects.all()[0]
         self.assertEqual(profile.name, data['name'])
