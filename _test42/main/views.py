@@ -1,6 +1,6 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from models import Profile, RequestLog
@@ -22,6 +22,8 @@ def profile_edit(request, profile_id=None):
         form = ProfileEditForm(data=request.POST, files=request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
     else:
         form = ProfileEditForm(instance=profile)
         
