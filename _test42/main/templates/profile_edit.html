@@ -31,9 +31,9 @@
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3">
-				{% if form.initial.photo %}
-				<img id="photo_preview" src="{{ form.initial.photo.url }}" width="230" height="320" />
-				{% endif %}
+				
+				<img id="photo_preview" src="{% if form.initial.photo %}{{ form.initial.photo.url }}{% endif %}" width="230" height="320" />
+				
 			</td>
 			<td colspan="2">{{ form.bio }}</td>
 		</tr>

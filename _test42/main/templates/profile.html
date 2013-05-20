@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>42 Coffee Cups Test Assignment</h1>
-<a href="{% url profile_edit profile_id=profile.id %}">Login to edit</a>
+<a href="{% url profile_edit profile_id=profile.id %}">Edit</a>
 <table>
 	<tr>
 		<td>Personal data</td><td colspan="2">Contacts</td>
@@ -17,10 +17,19 @@
 		<td>{{ profile.birth_date }}</td><td>Skype:</td><td>{{ profile.skype }}</td>
 	</tr>
 	<tr>
-		<td>Bio:</td><td colspan="2">Other contacts:</td>
+		<td>Photo:</td><td colspan="2">Bio:</td>
+	</tr>
+	<tr>
+		<td rowspan="3">
+			<img src="{% if profile.photo %}{{ profile.photo.url }}{% endif %}" width="230" height="320" />
+		</td>
+		<td colspan="2" valign="top">{{ profile.bio }}</td>
+	</tr>
+	<tr>
+		<td colspan="2">Other contacts:</td>
 	</tr
 	<tr>
-		<td>{{ profile.bio }}</td><td colspan="2">{{ profile.other }}</td>
+		<td colspan="2" valign="top">{{ profile.other }}</td>
 	</tr>
 	
 </table>
