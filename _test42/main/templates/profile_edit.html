@@ -32,7 +32,7 @@
 		<tr>
 			<td colspan="2" rowspan="3">
 				{% if form.initial.photo %}
-				<img src="{{ form.initial.photo.url }}" width="230" height="320" />
+				<img id="photo_preview" src="{{ form.initial.photo.url }}" width="230" height="320" />
 				{% endif %}
 			</td>
 			<td colspan="2">{{ form.bio }}</td>
@@ -47,4 +47,20 @@
 	<input type="submit" value="Submit" /> <a href="/">Cancel</a>
 </form>
 <hr/>
+{% endblock %}
+
+{% block scripts %}
+	{{ block.super }}
+	<script type="text/javascript">
+		$('#id_photo').on('change', function(){
+			
+			if (this.files && this.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$('#photo_preview').attr('src', e.target.result)
+				}
+				reader.readAsDataURL(this.files[0]);
+			}
+		});
+	</script>
 {% endblock %}
