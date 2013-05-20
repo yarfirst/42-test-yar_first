@@ -36,3 +36,4 @@ nosetests.xml
 .settings
 test42
 _test42/media/*
+dev.py

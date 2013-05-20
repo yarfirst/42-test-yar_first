@@ -2,16 +2,23 @@
 
 {% block extrahead %}
 	{{ form.media }}
+	<style>
+		.progress { position:relative; width:400px; border: 1px solid #f19d17; padding: 1px; border-radius: 3px; }
+		.bar { background-color: #f19d17; width:0%; height:20px; border-radius: 3px; }
+		.percent { position:absolute; display:inline-block; top:3px; left:48%; }
+	</style>
 {% endblock %}
 
 {% block content %}
 <h1>42 Coffee Cups Test Assignment</h1>
 
+<div id="form_errors">
 {% if form.errors %}
 	{{ form.errors }}
 {% endif %}
+</div>
 
-<form method="post" action="{% url profile_edit profile_id=form.initial.id %}" enctype="multipart/form-data">
+<form id="profile_edit_form" method="post" action="{% url profile_edit profile_id=form.initial.id %}" enctype="multipart/form-data">
 	{% csrf_token %}
 	<table>
 		<tr>
@@ -48,6 +55,10 @@
 			<td colspan="2">{{ form.other }}</td>
 		</tr>
 	</table>
+	<div class="progress" style="display: none">
+        <div class="bar"></div>
+        <div class="percent">0%</div >
+    </div>
 	<input type="submit" value="Submit" /> <a href="/">Cancel</a>
 </form>
 <hr/>
@@ -55,16 +66,61 @@
 
 {% block scripts %}
 	{{ block.super }}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.form.js"></script>
 	<script type="text/javascript">
-		$('#id_photo').on('change', function(){
-			
-			if (this.files && this.files[0]){
-				var reader = new FileReader();
-				reader.onload = function(e){
-					$('#photo_preview').attr('src', e.target.result)
+		$(document).ready(function(){ 
+			$('#id_photo').on('change', function(){
+				if (this.files && this.files[0]){
+					var reader = new FileReader();
+					reader.onload = function(e){
+						$('#photo_preview').attr('src', e.target.result);
+					};
+					reader.readAsDataURL(this.files[0]);
 				}
-				reader.readAsDataURL(this.files[0]);
-			}
+			});
+			
+			var progress = $('.progress');
+			var bar = $('.bar');
+			var percent = $('.percent');
+			var form_errors = $('#form_errors');
+			
+			var controls = $('input, textarea');
+			
+			controls.on('keypress', function(){
+				progress.hide();
+			});
+			
+			$('#profile_edit_form').ajaxForm({
+				beforeSend: function(){
+					controls.attr('disabled', true);
+					form_errors.hide();
+					progress.show();
+					
+					var percentVal = '0%';
+        			bar.width(percentVal);
+        			percent.html(percentVal);
+				},
+				uploadProgress: function(event, position, total, percentComplete){
+        			var percentVal = percentComplete + '%';
+        			bar.width(percentVal);
+        			percent.html(percentVal);
+				},
+				success: function(){
+					controls.attr('disabled', false);
+					
+			        var percentVal = '100%';
+			        bar.width(percentVal);
+			        percent.html(percentVal);
+				},
+				complete: function(resp){
+					var resp_text = resp.responseText.trim();
+					if (resp_text.length){
+						form_errors.html(resp_text);
+						form_errors.show();
+					}
+
+				}
+			});
 		});
 	</script>
 {% endblock %}
