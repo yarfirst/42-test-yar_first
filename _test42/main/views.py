@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from models import Profile, RequestLog
 from forms import ProfileEditForm
 
+
 def profile(request):
     profile = Profile.objects.all()[0]
 

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load edit_link %}
 
 {% block content %}
 <h1>42 Coffee Cups Test Assignment</h1>
-<a href="{% url profile_edit profile_id=profile.id %}">Edit</a>
+<a href="{% url profile_edit profile_id=profile.id %}">Edit</a> {% edit_link profile %}
 <table>
 	<tr>
 		<td>Personal data</td><td colspan="2">Contacts</td>

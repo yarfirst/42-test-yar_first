@@ -30,6 +30,7 @@ class Test(TestCase):
 
         p = Profile.objects.all()[0]
         self.failUnless(res.content.find(p.name))
+        self.failUnless(res.content.find('edit_in_admin'))
 
     def test_request_middleware(self):
         res = self.client.get('/requests/')
