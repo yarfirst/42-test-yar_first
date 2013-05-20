@@ -15,4 +15,4 @@ def edit_link(obj):
         return ''
     
     url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.module_name), args=[obj.id])
-    return u'(<a class="edit_in_admin" href="%s">Edit</a>)' % url
+    return u'(<a class="edit_in_admin" href="%s">admin</a>)' % url
