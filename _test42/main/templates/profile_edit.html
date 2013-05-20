@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>42 Coffee Cups Test Assignment</h1>
+
+{% if form.errors %}
+	{{ form.errors }}
+{% endif %}
+
+<form method="post" action="{% url profile_edit profile_id=form.initial.id %}" enctype="multipart/form-data">
+	{% csrf_token %}
+	<table>
+		<tr>
+			<td colspan="2">Personal data</td><td colspan="2">Contacts</td>
+		</tr>
+		<tr>
+			<td>Name:</td><td>{{ form.name }}</td>
+			<td>Email:</td><td>{{ form.email }}</td>
+		</tr>
+		<tr>
+			<td>Last name:</td><td>{{ form.surname }}</td>
+			<td>Jabber:</td><td>{{ form.jabber }}</td>
+		</tr>
+		<tr>
+			<td>Date of birth:</td><td>{{ form.birth_date }}</td>
+			<td>Skype:</td><td>{{ form.skype }}</td>
+		</tr>
+		<tr>
+			<td>Photo:</td><td>{{ form.photo }}</td>
+			<td colspan="2">Bio:</td>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="3">
+				
+				<img id="photo_preview" src="{% if form.initial.photo %}{{ form.initial.photo.url }}{% endif %}" width="230" height="320" />
+				
+			</td>
+			<td colspan="2">{{ form.bio }}</td>
+		</tr>
+		<tr>
+			<td colspan="2">Other contacts:</td>
+		</tr>
+		<tr>
+			<td colspan="2">{{ form.other }}</td>
+		</tr>
+	</table>
+	<input type="submit" value="Submit" /> <a href="/">Cancel</a>
+</form>
+<hr/>
+{% endblock %}
+
+{% block scripts %}
+	{{ block.super }}
+	<script type="text/javascript">
+		$('#id_photo').on('change', function(){
+			
+			if (this.files && this.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$('#photo_preview').attr('src', e.target.result)
+				}
+				reader.readAsDataURL(this.files[0]);
+			}
+		});
+	</script>
+{% endblock %}

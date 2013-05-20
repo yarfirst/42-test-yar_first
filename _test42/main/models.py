@@ -14,6 +14,8 @@ class Profile(models.Model):
     skype = models.IntegerField()
     other = models.TextField()
 
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d', null=True, blank=True)
+    
     def __unicode__(self):
         return u'%s %s' % (self.name, self.surname)
 
