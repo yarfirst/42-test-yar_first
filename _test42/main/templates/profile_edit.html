@@ -3,9 +3,8 @@
 {% block extrahead %}
 	{{ form.media }}
 	<style>
-		.progress { position:relative; width:400px; border: 1px solid #f19d17; padding: 1px; border-radius: 3px; }
-		.bar { background-color: #f19d17; width:0%; height:20px; border-radius: 3px; }
-		.percent { position:absolute; display:inline-block; top:3px; left:48%; }
+		.el_error {border-color: red}
+		.error_message {color: red}
 	</style>
 {% endblock %}
 
@@ -55,10 +54,7 @@
 			<td colspan="2">{{ form.other }}</td>
 		</tr>
 	</table>
-	<div class="progress" style="display: none">
-        <div class="bar"></div>
-        <div class="percent">0%</div >
-    </div>
+	<div class="progress"></div>
 	<input type="submit" value="Submit" /> <a href="/">Cancel</a>
 </form>
 <hr/>
@@ -80,10 +76,7 @@
 			});
 			
 			var progress = $('.progress');
-			var bar = $('.bar');
-			var percent = $('.percent');
-			var form_errors = $('#form_errors');
-			
+
 			var controls = $('input, textarea');
 			
 			controls.on('keypress', function(){
@@ -92,33 +85,26 @@
 			
 			$('#profile_edit_form').ajaxForm({
 				beforeSend: function(){
-					controls.attr('disabled', true);
-					form_errors.hide();
-					progress.show();
-					
-					var percentVal = '0%';
-        			bar.width(percentVal);
-        			percent.html(percentVal);
-				},
-				uploadProgress: function(event, position, total, percentComplete){
-        			var percentVal = percentComplete + '%';
-        			bar.width(percentVal);
-        			percent.html(percentVal);
+					controls.attr('disabled', true).removeClass('el_error');
+					$('.error_message').remove();
+					progress.text('Sending...');
 				},
 				success: function(){
 					controls.attr('disabled', false);
-					
-			        var percentVal = '100%';
-			        bar.width(percentVal);
-			        percent.html(percentVal);
+					progress.text('Sucess');
 				},
 				complete: function(resp){
-					var resp_text = resp.responseText.trim();
-					if (resp_text.length){
-						form_errors.html(resp_text);
-						form_errors.show();
+					var resp_data = $.parseJSON(resp.responseText);
+					if (resp_data.errors !== undefined){
+						$.each(resp_data.errors, function(name, message){
+							progress.text('Error');
+							
+							var el = $('[name='+name+']').addClass('el_error');
+							el.parent().append('<span class="error_message">'+message+'</span>');
+						});
+					} else {
+						setTimeout(function(){ progress.text('') }, 2000);
 					}
-
 				}
 			});
 		});
