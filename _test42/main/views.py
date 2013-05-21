@@ -1,12 +1,13 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.utils import simplejson
 
+from _test42.main.models import Profile, RequestLog
+from _test42.main.forms import ProfileEditForm
 
-from models import Profile, RequestLog
-from forms import ProfileEditForm
 
 def profile(request):
     profile = Profile.objects.all()[0]
@@ -34,7 +35,10 @@ def profile_edit(request, profile_id=None):
                                             reverse('profile_edit', kwargs={'profile_id': profile.id })))
 
         if _is_ajax:
-            return render(request, 'profile_edit_errors.html', {'form': form})
+            response_data = {}
+            if not _is_valid:
+                response_data['errors'] = form.errors
+            return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
     else:
         form = ProfileEditForm(instance=profile)
