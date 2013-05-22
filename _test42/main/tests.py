@@ -99,5 +99,11 @@ class Test(TestCase):
         _stdout.seek(0)
         _stderr.seek(0)
 
-        self.failUnless(len(_stdout.read()))
-        self.failUnless(len(_stderr.read()))
+        _out_text = _stdout.read()
+        _err_text = _stderr.read()
+        
+        self.failUnless(len(_out_text))
+        self.failUnless(len(_err_text))
+
+        self.failUnless('_test42.main.models.Profile' in _out_text)
+        self.failUnless('_test42.main.models.RequestLog' in _err_text)
