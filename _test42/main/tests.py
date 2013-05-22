@@ -4,7 +4,10 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
+import sys
+from StringIO import StringIO
 
+from django.core.management import call_command
 from django.test import TestCase
 
 from models import Profile, RequestLog
@@ -80,3 +83,21 @@ class Test(TestCase):
         
         profile = Profile.objects.all()[0]
         self.assertEqual(profile.name, data['name'])
+
+    def test_project_models_command(self):
+        stdout_orig = sys.stdout
+        stderr_orig = sys.stderr
+        
+        sys.stdout = _stdout = StringIO()
+        sys.stderr = _stderr = StringIO()
+
+        call_command('project_models')
+
+        sys.stdout = stdout_orig
+        sys.stderr = stderr_orig
+        
+        _stdout.seek(0)
+        _stderr.seek(0)
+
+        self.failUnless(len(_stdout.read()))
+        self.failUnless(len(_stderr.read()))

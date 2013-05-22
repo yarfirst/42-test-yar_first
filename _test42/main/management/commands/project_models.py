@@ -12,4 +12,4 @@ class Command(BaseCommand):
             
             output = "%s.%s\t%d" % (model.__module__, model.__name__, model._default_manager.count())
             print output
-            print >> sys.stderr, output
+            print >> sys.stderr, 'error: %s' % output
