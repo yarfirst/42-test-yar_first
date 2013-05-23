@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 
-from models import Profile, RequestLog
+from models import Profile, RequestLog, ModelChangesLog
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -19,5 +19,10 @@ class RequestLogAdmin(admin.ModelAdmin):
     list_display = ('datetime', 'method', 'url', 'remote_addr')
 
 
+class ModelChangesLogAdmin(admin.ModelAdmin):
+    list_display = ('datetime', 'name', 'action')
+    
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(RequestLog, RequestLogAdmin)
+admin.site.register(ModelChangesLog, ModelChangesLogAdmin)

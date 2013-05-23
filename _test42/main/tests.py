@@ -10,7 +10,7 @@ from StringIO import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 
-from models import Profile, RequestLog
+from models import Profile, RequestLog, ModelChangesLog
 
 
 class Test(TestCase):
@@ -107,3 +107,21 @@ class Test(TestCase):
 
         self.failUnless('_test42.main.models.Profile' in _out_text)
         self.failUnless('_test42.main.models.RequestLog' in _err_text)
+
+    def test_signals(self):
+        rlog = RequestLog.objects.create(method='GET', \
+                                 url="/requests/", \
+                                 remote_addr="http://localhost/")
+        
+        changes_log = ModelChangesLog.objects.filter(name='RequestLog', action='create')
+        self.failUnless(changes_log)
+
+        rlog.remote_addr = 'http://localhost:8080/'
+        rlog.save()
+        
+        changes_log = ModelChangesLog.objects.filter(name='RequestLog', action='edit')
+        self.failUnless(changes_log)
+
+        rlog.delete()
+        changes_log = ModelChangesLog.objects.filter(name='RequestLog', action='delete')
+        self.failUnless(changes_log)
