@@ -16,7 +16,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class RequestLogAdmin(admin.ModelAdmin):
-    list_display = ('datetime', 'method', 'url', 'remote_addr')
+    list_display = ('datetime', 'method', 'url', 'remote_addr', 'order')
 
 
 class ModelChangesLogAdmin(admin.ModelAdmin):

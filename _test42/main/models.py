@@ -7,24 +7,24 @@ from django.dispatch import receiver
 def _log_action(model_name, action):
     changes_log = ModelChangesLog(name=model_name, action=action)
     changes_log.save()
-    
+     
     return changes_log
-    
-
+     
+ 
 @receiver(post_save)
 def model_post_save(sender, instance, created, **kwargs):
     model_name = sender.__name__
     if model_name != 'ModelChangesLog':
         action = 'create' if created else 'edit'
-
+ 
         _log_action(model_name, action)
-
-
+ 
+ 
 @receiver(post_delete)
 def model_post_delete(sender, instance, **kwargs):
     model_name = sender.__name__
     if model_name != 'ModelChangesLog':
-        
+         
         _log_action(model_name, 'delete')
 
 
@@ -52,6 +52,8 @@ class RequestLog(models.Model):
     url = models.CharField(max_length=256)
     remote_addr = models.CharField(max_length=60)
     datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    order = models.IntegerField(default=0)
 
 
 class ModelChangesLog(models.Model):

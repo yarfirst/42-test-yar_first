@@ -48,7 +48,7 @@ def profile_edit(request, profile_id=None):
 
 
 def request_log(request):
-    request_logs = RequestLog.objects.order_by('id')[:10]
+    request_logs = RequestLog.objects.order_by('-order', 'id')[:10]
     request_logs = list(request_logs)
     
     return render(request, 'request_log.html', {'request_logs': request_logs})
