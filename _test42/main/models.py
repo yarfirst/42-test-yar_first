@@ -50,7 +50,7 @@ class RequestLog(models.Model):
 
     method = models.CharField(max_length=40)
     url = models.CharField(max_length=256)
-    remote_addr = models.CharField(max_length=60)
+    remote_addr = models.CharField(max_length=60, null=True, blank=True)
     datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     order = models.IntegerField(default=0)
