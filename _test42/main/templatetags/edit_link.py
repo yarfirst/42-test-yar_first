@@ -10,9 +10,10 @@ register = template.Library()
 def edit_link(obj):
     if not isinstance(obj, Model):
         return ''
-    
+
     if obj._meta.concrete_model not in admin.site._registry:
         return ''
-    
-    url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.module_name), args=[obj.id])
+
+    url = reverse('admin:%s_%s_change' % (obj._meta.app_label, \
+                  obj._meta.module_name), args=[obj.id])
     return u'(<a class="edit_in_admin" href="%s">admin</a>)' % url
