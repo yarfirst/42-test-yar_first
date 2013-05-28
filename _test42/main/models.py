@@ -7,24 +7,26 @@ from django.dispatch import receiver
 def _log_action(model_name, action):
     changes_log = ModelChangesLog(name=model_name, action=action)
     changes_log.save()
-     
+
     return changes_log
-     
- 
+
+
 @receiver(post_save)
 def model_post_save(sender, instance, created, **kwargs):
     model_name = sender.__name__
-    if model_name != 'ModelChangesLog':
+
+    if 'django.contrib' not in sender.__module__ \
+    and model_name != 'ModelChangesLog':
         action = 'create' if created else 'edit'
- 
+
         _log_action(model_name, action)
- 
- 
+
+
 @receiver(post_delete)
 def model_post_delete(sender, instance, **kwargs):
     model_name = sender.__name__
     if model_name != 'ModelChangesLog':
-         
+
         _log_action(model_name, 'delete')
 
 
@@ -40,8 +42,9 @@ class Profile(models.Model):
     skype = models.IntegerField()
     other = models.TextField()
 
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d', null=True, blank=True)
-    
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d', \
+                              null=True, blank=True)
+
     def __unicode__(self):
         return u'%s %s' % (self.name, self.surname)
 
@@ -57,7 +60,7 @@ class RequestLog(models.Model):
 
 
 class ModelChangesLog(models.Model):
-    
+
     name = models.CharField(max_length=100)
     action = models.CharField(max_length=40)
     datetime = models.DateTimeField(auto_now=True, auto_now_add=True)
