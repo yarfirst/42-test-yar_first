@@ -12,6 +12,7 @@ from urlparse import urlparse
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
+from django.template import Template, context
 from django.test import TestCase
 
 from models import Profile, RequestLog, ModelChangesLog
@@ -28,7 +29,7 @@ class Test(TestCase):
         self.assertEqual(p.name, 'Some name')
 
     def test_profile_page(self):
-        res = self.client.get('/')
+        res = self.client.get(reverse('profile'))
         self.assertEqual(res.status_code, 200)
 
         self.assertTrue(res.context['profile'])
@@ -37,8 +38,14 @@ class Test(TestCase):
         self.assertContains(res, p.name)
         self.assertContains(res, 'edit_in_admin')
 
+    def test_edit_tag_link(self):
+        p = Profile.objects.all()[0]
+        tpl = Template('{% load edit_link %}{% edit_link profile %}')
+        res = tpl.render(context.Context({'profile': p}))
+        self.assertTrue('edit_in_admin' in res)
+
     def test_request_middleware(self):
-        res = self.client.get('/requests/')
+        res = self.client.get(reverse('request_log'))
         self.assertEqual(res.status_code, 200)
 
         request_logs = RequestLog.objects.all().order_by('id')
@@ -52,10 +59,10 @@ class Test(TestCase):
         self.assertTrue(log_length)
         self.assertFalse(log_length > 10)
 
-        self.assertTrue(res.content.find('/requests/'))
+        self.assertContains(res, '/requests/')
 
     def test_context_processor(self):
-        res = self.client.get('/')
+        res = self.client.get(reverse('profile'))
         self.assertEqual(res.status_code, 200)
 
         self.assertTrue(res.context['SETTINGS'])
