@@ -39,3 +39,4 @@ dev.py
 _test42/media/*
 dev.py
 *.dat
+*.db
