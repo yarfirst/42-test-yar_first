@@ -16,7 +16,7 @@ def model_post_save(sender, instance, created, **kwargs):
     model_name = sender.__name__
 
     if 'django.contrib' not in sender.__module__ \
-    and model_name != 'ModelChangesLog':
+    and model_name not in ['ModelChangesLog', 'MigrationHistory']:
         action = 'create' if created else 'edit'
 
         _log_action(model_name, action)
