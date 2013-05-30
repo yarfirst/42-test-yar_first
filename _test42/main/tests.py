@@ -141,3 +141,15 @@ class Test(TestCase):
         changes_log = ModelChangesLog.objects.filter(name='RequestLog', \
                                  action='delete')
         self.assertTrue(changes_log)
+
+    def test_delete_request_log(self):
+        rlog = RequestLog.objects.create(method='GET', \
+                                 url="/requests/", \
+                                 remote_addr="http://localhost/")
+
+        res = self.client.get(reverse('request_log_delete', \
+                                kwargs={'entry_id': rlog.id}))
+        self.assertEqual(res.status_code, 200)
+
+        requests = RequestLog.objects.filter(id=rlog.id)
+        self.assertFalse(requests)

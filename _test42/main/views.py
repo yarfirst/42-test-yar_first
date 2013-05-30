@@ -55,3 +55,11 @@ def request_log(request):
     request_logs = list(request_logs)
 
     return render(request, 'request_log.html', {'request_logs': request_logs})
+
+
+def delete_request_log(request, entry_id):
+    entry = get_object_or_404(RequestLog, id=int(entry_id))
+    entry.delete()
+
+    return HttpResponse(simplejson.dumps({'entry_id': entry_id}), \
+                        mimetype="application/json")
