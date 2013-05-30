@@ -143,12 +143,15 @@ class Test(TestCase):
         self.assertTrue(changes_log)
 
     def test_delete_request_log(self):
+        del_url = reverse('request_log_delete')
+        res = self.client.get(del_url)
+        self.assertEqual(res.status_code, 404)
+
         rlog = RequestLog.objects.create(method='GET', \
                                  url="/requests/", \
                                  remote_addr="http://localhost/")
 
-        res = self.client.get(reverse('request_log_delete', \
-                                kwargs={'entry_id': rlog.id}))
+        res = self.client.post(del_url, {'entry_id': rlog.id})
         self.assertEqual(res.status_code, 200)
 
         requests = RequestLog.objects.filter(id=rlog.id)

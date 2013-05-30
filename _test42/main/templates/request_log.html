@@ -3,14 +3,14 @@
 {% block content %}
 <table>
 	<tr>
-		<td>DateTime</td><td>Method</td><td>Url</td>><td>Order</td><td>*</td>
+		<td>DateTime</td><td>Method</td><td>Url</td><td>Order</td><td>*</td>
 	</tr>
 	{% for r in request_logs %}
 	<tr id="request_log_{{ r.id }}">
 		<td>{{ r.datetime|date:'Y-m-d H:i' }}</td><td>{{ r.method }}</td>
 		<td>{{ r.url }}</td><td>{{ r.order }}</td>
 		<td>
-			<a href="javascript:{}" class="js_delete" entry="{% url request_log_delete entry_id=r.id %}">Delete</a>
+			<a href="javascript: {}" class="js_delete" entry="{{ r.id }}">Delete</a>
 		</td>
 	</tr>
 	{% endfor %}
@@ -26,13 +26,16 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.js_delete').on('click', function(){
-				$.ajax({
-					url: $(this).attr('entry')
+				var el = $(this);
+				$.post('{% url request_log_delete %}', {
+					'csrfmiddlewaretoken': '{{csrf_token}}', 
+					'entry_id': el.attr('entry')
 				}).done(function(resp) {
 					if (resp.entry_id !== undefined){
 						$('#request_log_' + resp.entry_id).remove();
 					}
 				});
+
 			});
 		});
 	</script>

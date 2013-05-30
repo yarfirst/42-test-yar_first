@@ -57,7 +57,11 @@ def request_log(request):
     return render(request, 'request_log.html', {'request_logs': request_logs})
 
 
-def delete_request_log(request, entry_id):
+def delete_request_log(request):
+    if not request.POST and 'entry_id' not in request.POST:
+        raise Http404
+    entry_id = request.POST['entry_id']
+
     entry = get_object_or_404(RequestLog, id=int(entry_id))
     entry.delete()
 
