@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% csrf_token %}
 <table>
 	<tr>
 		<td>DateTime</td><td>Method</td><td>Url</td><td>Order</td><td>*</td>
@@ -10,7 +11,7 @@
 		<td>{{ r.datetime|date:'Y-m-d H:i' }}</td><td>{{ r.method }}</td>
 		<td>{{ r.url }}</td><td>{{ r.order }}</td>
 		<td>
-			<a href="javascript: {}" class="js_delete" entry="{{ r.id }}">Delete</a>
+			<a href="{% url request_log_delete %}" class="js_delete" entry="{{ r.id }}">Delete</a>
 		</td>
 	</tr>
 	{% endfor %}
@@ -23,20 +24,5 @@
 
 {% block scripts %}
 	{{ block.super }}
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('.js_delete').on('click', function(){
-				var el = $(this);
-				$.post('{% url request_log_delete %}', {
-					'csrfmiddlewaretoken': '{{csrf_token}}', 
-					'entry_id': el.attr('entry')
-				}).done(function(resp) {
-					if (resp.entry_id !== undefined){
-						$('#request_log_' + resp.entry_id).remove();
-					}
-				});
-
-			});
-		});
-	</script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/requests.js"></script>
 {% endblock %}
